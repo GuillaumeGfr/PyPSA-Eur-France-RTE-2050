@@ -1,0 +1,144 @@
+# SPDX-FileCopyrightText: Contributors to PyPSA-Eur <https://github.com/pypsa/pypsa-eur>
+#
+# SPDX-License-Identifier: CC0-1.0
+
+tutorial: false
+
+
+run:
+  name: "M23" # use this to keep track of runs with different settings
+  scenarios:
+    enable: false
+    file: config/scenarios.yaml
+  disable_progressbar: false
+  shared_resources:
+    policy: false
+  shared_cutouts: true
+
+scenario:
+  clusters:
+  - 150
+  opts:
+  - ''
+
+countries: ['FR']
+
+snapshots:
+  start: "2023-01-01"
+  end: "2023-12-31"
+  inclusive: 'both'
+
+electricity:
+  co2limit_enable: false
+
+  extendable_carriers:
+    Generator: []
+    StorageUnit: []
+    Store: []
+    Link: []
+
+  renewable_carriers: [solar, onwind, offwind-ac, offwind-dc, offwind-float, hydro]
+  
+  
+  estimate_renewable_capacities:
+    enable: false
+
+  transmission_limit: v1
+
+
+atlite:
+  default_cutout: europe-2023-sarah3-era5
+  show_progress: true
+  cutouts:
+    base:
+      module: era5
+    
+renewable:
+  offwind-ac:
+    max_depth: 60
+  offwind-dc:
+    max_depth: 60
+  offwind-float:
+    max_depth: 1000
+    min_depth: 60
+  hydro:
+    carriers: [ror, PHS, hydro]
+
+load:
+  supplement_synthetic: false
+
+clustering:
+  exclude_carriers: []
+  temporal:
+    resolution_elec: 1h
+
+lines:
+  dynamic_line_rating:
+    activate: false
+    max_line_rating: false
+
+sector:
+  transport: false
+  heating: false
+  biomass: false
+  industry: false
+  shipping: false
+  aviation: false
+  agriculture: false
+  fossil_fuels: false
+
+transmission_projects:
+  enable: true
+  include:
+    tyndp2020: true
+    nep: true
+    manual: true
+  skip:
+  - upgraded_lines
+  - upgraded_links
+  status:
+  - under_construction
+  - in_permitting
+  - confirmed
+    #- planned_not_yet_permitted
+    #- under_consideration
+  new_link_capacity: zero #keep or zero
+
+solving:
+  options:
+    curtailment_mode: true
+    load_shedding: 15
+    io_api: direct
+
+  solver:
+    name: gurobi
+    options: gurobi-default
+
+  solver_options:
+    gurobi-default:
+        threads: 8
+        method: 2 # barrier
+        crossover: 0
+        BarConvTol: 1.e-3
+        FeasibilityTol: 1.e-3
+        OptimalityTol: 1.e-3
+        Seed: 123
+        AggFill: 0
+        PreDual: 0
+        GURO_PAR_BARDENSETHRESH: 200
+  check_objective:
+    enable: false
+  
+
+
+plotting:
+  map:
+    boundaries:
+  eu_node_location:
+    x: -5.5
+    y: 46.
+  costs_max: 1000
+  costs_threshold: 0.0000001
+  energy_max:
+  energy_min:
+  energy_threshold: 0.000001
