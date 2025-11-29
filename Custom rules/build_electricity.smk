@@ -621,7 +621,7 @@ rule cluster_network:
             else []
         ),
         load=resources("electricity_demand_base_s.nc"),
-        exchange=("data/flows_with_timestamps.csv"),
+        exchange=("data/cross_border_flows.csv"),
         nuts1_regions=("data/nuts/NUTS_RG_01M_2021_4326_LEVL_1.geojson"),
     output:
         network=resources("networks/base_s_{clusters}.nc"),
@@ -841,3 +841,4 @@ if config["electricity"]["base_network"] == "osm-raw":
             "../envs/environment.yaml"
         script:
             "../scripts/build_osm_network.py"
+
