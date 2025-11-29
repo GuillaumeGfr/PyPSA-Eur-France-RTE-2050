@@ -1078,7 +1078,7 @@ def allocate_with_minimum(weights, total_capacity, min_threshold):
 
     return allocations
 
-#Edit for RTE 2050: Add flexibility to buses
+#Edit for RTE 2050: Add power-to-gas-to-power flexibility to buses
 def add_flexibility(n, flexibility_csv, scenario_name):
     import pandas as pd
     import numpy as np
@@ -1089,7 +1089,6 @@ def add_flexibility(n, flexibility_csv, scenario_name):
         "g2p_CCG": 400.0,
     }
 
-      # 0. strip trailing 'cp' if present
     lookup_scenario = (
         scenario_name[:-2] if scenario_name.endswith("cp") 
         else scenario_name
@@ -1314,7 +1313,6 @@ if __name__ == "__main__":
     print(">>> assign_custom_renewables_from_csv() called")
     print("    run_name =", snakemake.config.get("run", "[MISSING]"))
     print("    rte_regions_path =", snakemake.input.get("rte_regions_path", "[MISSING]"))
-    #Run function from ChatGPT
     assign_custom_renewables_copperplate(
         n,
         rte_regions_path=snakemake.input.rte_regions_path,
@@ -1369,4 +1367,5 @@ if __name__ == "__main__":
 
     n.meta = dict(snakemake.config, **dict(wildcards=dict(snakemake.wildcards)))
     n.export_to_netcdf(snakemake.output[0])
+
 
