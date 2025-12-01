@@ -1,5 +1,24 @@
 # PyPSA-EUR-France-RTE-2050
-This repo contains edits made to [PyPSA-Eur](https://github.com/PyPSA/PyPSA-Eur) to run a fixed capacity dispatch only model of the French grid in 2050, under scenarios from RTE's [_Futurs énergétiques 2050_](https://analysesetdonnees.rte-france.com/en/publications/energy-pathways-2050) study. These modifications were made for my BSc thesis, which ran the model to study grid congestion under the 6 scenarios presented in the study. These scenarios include data on teh genreation mix, flexibility technologies, interconnections, electricity demand, and the location of generators, which can be implemented into PyPSA-Eur with the changes shown here. The contents of this repo are not a standalone project, they should be used as an addition to the existing workflow of PyPSA-Eur
+This repo contains edits made to [PyPSA-Eur](https://github.com/PyPSA/PyPSA-Eur) to run a fixed capacity dispatch only model of the French grid in 2050, under scenarios from RTE's [_Futurs énergétiques 2050_](https://analysesetdonnees.rte-france.com/en/publications/energy-pathways-2050) study. These modifications were made to study grid congestion under the 6 scenarios from RTE. These scenarios include data on the generation mix, flexibility technologies, interconnections, electricity demand, and the location of generators, which can be implemented into PyPSA-Eur with the changes shown here. The contents of this repo are not a standalone model, they should be used as an addition to the existing workflow of PyPSA-Eur
+
+# Instructions for use
+## Installation
+* Install PyPSA-Eur and get familiar with it
+* Download this repo
+* Move files to their relevant folders:
+  * Config: These are config files used to run each RTE scenario. Copy them into your pypsa-eur/config folder. (Make sure to adapt the config parameters to your study, for example they are currently set under a very accurate but computationally intensive configuration)
+  * Custom data: Copy these files into your pypsa-eur/data folder
+  * Custom rules: Replace the build_electricity.smk file in pypsa-eur/rules with the one from this repo (keep the original file, you can just rename it by adding for example '_original' so that snakemake uses the modified version)
+  * Custom scripts: replace the existing scripts in pypsa-eur/scripts with the modified scripts; rename the original scripts so that snakemake uses the modified scripts instead.
+ 
+## Running the model
+The usual snakemake workflow is preserved:
+* Run scenarios by calling the corresponding [scenario name].yaml in the snakemake command line, for example ``` snakemake -j2 results/M0/networks/base_s_151_elec_.nc --configfile config/M0cp.yaml ```.
+
+This will run the full snakemake workflow and spit out a solved network for the specified scenario in the results folder.
+
+
+
 
 # Modelling approach
 ## Generation capacity
@@ -24,6 +43,10 @@ The load curve was taken from the year 2023 (because it is the most recent year 
 ## Limitations
 This setup was created for a specific goal: to model congestion in the French grid under generation mixes from RTE's 2050 scenarios. As such, it has inherent limitations:
 * The predetermined cross-border flows were made under weather year 2009, while the rest of the model runs with weather data from 2023. The logic to add the interconnections to the network is usable, however their behaviour is not aligned with the rest of the model.
+* This setup, run at hourly resolution for a full year, showed extremely high amounts of load shedding (between 6 and 10% of the load not met), which can be at least partly explained by the absence of demand-side flexibility in PyPSA-Eur (RTE for example mentions up to 15% of the load could be flexible and shifted within the day). This caused the load-shedding generators to run often, significantly inflating the marginal prices of most nodes. Implementating this repo will therefore have to be done with further modifications to avoid load shedding.
+* This setup was created for a dispatch-only study of congestion on the French grid under different scenarios of generation and flexibility mix, without sector coupling. As such, it is omitting or simplifying many essential components of energy systems modelling, and is therefore not suitable for an other study without major modifications.
+
+For any questions or issues, please contact me at g.l.geoffroy@students.uu.nl
 
 
 
