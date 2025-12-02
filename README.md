@@ -13,7 +13,7 @@ This repo contains edits made to [PyPSA-Eur](https://github.com/PyPSA/PyPSA-Eur)
  
 ## Running the model
 The usual snakemake workflow is preserved:
-* Run scenarios by calling the corresponding [scenario name].yaml in the snakemake command line, for example ``` snakemake -j2 results/M0/networks/base_s_151_elec_.nc --configfile config/M0cp.yaml ```.
+* Run scenarios by calling the corresponding [scenario name].yaml in the snakemake command line, for example ``` snakemake -j2 results/M0/networks/base_s_151_elec_.nc --configfile config/M0.yaml ```.
 
 This will run the full snakemake workflow and spit out a solved network for the specified scenario in the results folder.
 
