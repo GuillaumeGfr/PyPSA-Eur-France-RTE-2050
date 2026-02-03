@@ -1313,11 +1313,6 @@ if __name__ == "__main__":
     print(">>> assign_custom_renewables_from_csv() called")
     print("    run_name =", snakemake.config.get("run", "[MISSING]"))
     print("    rte_regions_path =", snakemake.input.get("rte_regions_path", "[MISSING]"))
-    assign_custom_renewables_copperplate(
-        n,
-        rte_regions_path=snakemake.input.rte_regions_path,
-        run_name=snakemake.config["run"]["name"]
-    )
     
     if "hydro" in renewable_carriers:
         p = params.renewable["hydro"]
@@ -1367,5 +1362,6 @@ if __name__ == "__main__":
 
     n.meta = dict(snakemake.config, **dict(wildcards=dict(snakemake.wildcards)))
     n.export_to_netcdf(snakemake.output[0])
+
 
 
